@@ -85,7 +85,6 @@ def GivePrediction(dfP):
 
 def main():
     st.title("Data Entry Form")
-
     # Create a form using the st.form context manager
     with st.form("data_entry_form"):
         st.subheader("Personal Information")
@@ -137,16 +136,17 @@ def main():
         # Display the submitted data
         st.subheader("Submitted Data")
         st.dataframe(df)
-        # Change from the Full txt, to simple ones
+        # Change from the Full txt, to simple ones for Categorical
         df2 = ChangeData(df)
         # Display the submitted data
         st.subheader("Simplified Data")
         st.dataframe(df2)
 
+        # Label Encode the data
         df3 = LabelEncode(df2)
         st.subheader("Encoded Data")
         st.dataframe(df3)
-
+        # Predict and Save to CSV
         df4, predictionValues = GivePrediction(df3)
         st.subheader("Final DF with prediction")
         st.dataframe(df4)
