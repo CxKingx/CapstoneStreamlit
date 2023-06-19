@@ -1,11 +1,7 @@
-import streamlit as st
-import pandas as pd
-import numpy as np
-import xgboost as xgb
-import pickle
-import joblib
 import os
-from sklearn.preprocessing import LabelEncoder
+import pandas as pd
+import streamlit as st
+import xgboost as xgb
 
 
 # Save into a csv the information and the Result
@@ -85,7 +81,7 @@ def GivePrediction(dfP):
 
 def main():
     st.title("Data Entry Form")
-    # Create a form using the st.form context manager
+    # Create a form using the st.form context manager to get all inputs for Prediction
     with st.form("data_entry_form"):
         st.subheader("Personal Information")
 
@@ -102,7 +98,7 @@ def main():
         loan_to_value = st.number_input("Original Loan-to-Value", format="%d", value=0, min_value=0, max_value=200)
         channel = st.selectbox("Channel", ["Retail", "Correspondent", "Broker"])
         property_type = st.selectbox("Property Type", ["Single Family", "Planned Unit", "Condominium", "Manufactured "
-                                                                                                        "Housing",
+                                                                                                       "Housing",
                                                        "Commercial Property"])
         postal_code = st.number_input("Postal Code", format="%d", value=0)
         loan_purpose = st.selectbox("Loan Purpose", ["Purchase", "Refinance", "Cash-out Refinance"])
@@ -132,20 +128,22 @@ def main():
         }
         # Create a DataFrame from the form data
         df = pd.DataFrame([data])
-        print(df)
+
         # Display the submitted data
-        st.subheader("Submitted Data")
-        st.dataframe(df)
+        # st.subheader("Submitted Data")
+        # st.dataframe(df)
+
         # Change from the Full txt, to simple ones for Categorical
         df2 = ChangeData(df)
         # Display the submitted data
-        st.subheader("Simplified Data")
-        st.dataframe(df2)
+        # st.subheader("Simplified Data")
+        # st.dataframe(df2)
 
         # Label Encode the data
         df3 = LabelEncode(df2)
-        st.subheader("Encoded Data")
-        st.dataframe(df3)
+        # st.subheader("Encoded Data")
+        # st.dataframe(df3)
+
         # Predict and Save to CSV
         df4, predictionValues = GivePrediction(df3)
         st.subheader("Final DF with prediction")
