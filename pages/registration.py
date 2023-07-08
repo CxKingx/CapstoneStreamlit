@@ -95,7 +95,11 @@ def main():
                                                                                                          "Residence"])
         combined_loan_to_value = st.number_input("Original Combined Loan-to-Value", format="%d", value=0, min_value=0,
                                                  max_value=200)
+        debt_to_income = st.number_input("Debt To Income Ratio", format="%d", value=0, min_value=0,
+                                         max_value=50)
         loan_to_value = st.number_input("Original Loan-to-Value", format="%d", value=0, min_value=0, max_value=200)
+
+        interest_rate = st.number_input("Original Interest Rate", format="%d", value=0, min_value=0, max_value=10)
         channel = st.selectbox("Channel", ["Retail", "Correspondent", "Broker"])
         property_type = st.selectbox("Property Type", ["Single Family", "Planned Unit", "Condominium", "Manufactured "
                                                                                                        "Housing",
@@ -118,15 +122,18 @@ def main():
             "NUMBER_OF_UNITS": num_units,
             "OCCUPANCY_STATUS": occupancy_status,
             "ORIGINAL_COMBINED_LOAN_TO_VALUE": combined_loan_to_value,
+            "ORIGINAL_DEBT_TO_INCOME_RATIO":debt_to_income,
             "ORIGINAL_LOAN_TO_VALUE": loan_to_value,
+            "ORIGINAL_INTEREST_RATE": interest_rate,
             "CHANNEL": channel,
             "PROPERTY_TYPE": property_type,
             "POSTAL_CODE": postal_code,
             "LOAN_PURPOSE": loan_purpose,
             "ORIGINAL_LOAN_TERM": loan_term,
             "NUMBER_OF_BORROWERS": num_borrowers
+
         }
-        # Create a DataFrame from the form data
+
         df = pd.DataFrame([data])
 
         # Display the submitted data
@@ -146,7 +153,7 @@ def main():
 
         # Predict and Save to CSV
         df4, predictionValues = GivePrediction(df3)
-        st.subheader("Final DF with prediction")
+        st.subheader("Thank You for Registering")
         st.dataframe(df4)
         st.subheader("The prediction is " + str(round(float(predictionValues[0][0]) * 100, 1)) + "% low risk")
 
