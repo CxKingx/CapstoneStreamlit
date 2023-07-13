@@ -3,7 +3,6 @@ import pandas as pd
 import streamlit as st
 import xgboost as xgb
 
-
 # Save into a csv the information and the Result
 def SaveInput(dfS):
     filename = "Database/output.csv"
@@ -17,27 +16,21 @@ def SaveInput(dfS):
         print("File already exists.")
     print("SAVED")
 
-
 def ChangeData(dfC):
     print("Change Data")
     # Mapping values for FIRST_TIME_HOMEBUYER_FLAG
     dfC["FIRST_TIME_HOMEBUYER_FLAG"] = dfC["FIRST_TIME_HOMEBUYER_FLAG"].map({"Yes": "Y", "No": "N"})
-
     # Mapping values for OCCUPANCY_STATUS
     dfC["OCCUPANCY_STATUS"] = dfC["OCCUPANCY_STATUS"].map(
         {"Primary Residence": "P", "Investment Property": "I", "Secondary Residence": "S"})
-
     # Mapping values for CHANNEL
     dfC["CHANNEL"] = dfC["CHANNEL"].map({"Retail": "R", "Correspondent": "C", "Broker": "B"})
-
     # Mapping values for PROPERTY_TYPE
     dfC["PROPERTY_TYPE"] = dfC["PROPERTY_TYPE"].map(
         {"Single Family": "SF", "Planned Unit": "PU", "Condominium": "CO", "Manufactured Housing": "MH",
          "Commercial Property": "CP"})
-
     # Mapping values for LOAN_PURPOSE
     dfC["LOAN_PURPOSE"] = dfC["LOAN_PURPOSE"].map({"Purchase": "P", "Refinance": "N", "Cash-out Refinance": "C"})
-    # ["FIRST_TIME_HOMEBUYER_FLAG", "OCCUPANCY_STATUS", "CHANNEL", "PROPERTY_TYPE", "LOAN_PURPOSE"]
     return dfC
 
 
@@ -87,7 +80,6 @@ def main():
 
         name = st.text_input("Name")
         credit_score = st.number_input("Credit Score", format="%d", value=0, min_value=0, max_value=800)
-
         first_time_homebuyer = st.selectbox("First Time Homebuyer Flag", ["No", "Yes"])
         msa = st.number_input("Metropolitan Statistical Area", format="%d", value=0)
         num_units = st.number_input("Number of Units", format="%d", value=1, min_value=1, max_value=4)
@@ -131,32 +123,18 @@ def main():
             "LOAN_PURPOSE": loan_purpose,
             "ORIGINAL_LOAN_TERM": loan_term,
             "NUMBER_OF_BORROWERS": num_borrowers
-
         }
 
         df = pd.DataFrame([data])
-
-        # Display the submitted data
-        # st.subheader("Submitted Data")
-        # st.dataframe(df)
-
-        # Change from the Full txt, to simple ones for Categorical
+        # Change from the Full text, to simple ones for Categorical
         df2 = ChangeData(df)
-        # Display the submitted data
-        # st.subheader("Simplified Data")
-        # st.dataframe(df2)
-
         # Label Encode the data
         df3 = LabelEncode(df2)
-        # st.subheader("Encoded Data")
-        # st.dataframe(df3)
-
         # Predict and Save to CSV
         df4, predictionValues = GivePrediction(df3)
         st.subheader("Thank You for Registering")
         st.dataframe(df4)
         st.subheader("The prediction is " + str(round(float(predictionValues[0][0]) * 100, 1)) + "% low risk")
-
         # Save the Dataframe
         SaveInput(df4)
 
